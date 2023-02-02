@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./css/admin.css">
+	<Title>Administrator</Title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#Add").click(function () {
+				var store_id = $('#storeID').val();
+				var firstName = $('#firstName').val();
+				var lastName = $('#lastName').val();
+				var email = $('#email').val();
+				var address1 = $('#address1').val();
+				var address2 = $('#address1').val();
+				var district = $('#district').val();
+				var city_id = $('#cityID').val();
+				var postal = $('#postal').val();
+				var phone = $('#phone').val();
+
+				if (store_id != '' && firstName && lastName != '' && email != '' && address1 != '' && address2 != '' && district != '' && city_id != '' && postal != '' && phone != '') {
+					var token = localStorage.getItem('token');
+					var data = `{ "store_id": "${store_id}", "first_name": "${firstName}", "last_name": "${lastName}", "email": "${email}", "address": { "address_line1": "${address1}", "address_line2": "${address2}", "district": "${district}", "city_id": "${city_id}", "postal_code": "${postal}", "phone": "${phone}" } }`;
+					$.ajax({
+						headers: { 'authorization': 'Bearer ' + token },
+						url: 'http://localhost:8081/admin/customer',
+						type: 'POST',
+						data: data,
+						contentType: "application/json; charset=utf-8",
+						dataType: 'json',
+						success: function (data, textStatus, xhr) {
+							if (data != null && data.success) {
+								$('#msg').html('Customer added successfully!');
+							} else {
+								console.log("Error");
+							}
+						},
+						error: function (xhr, textStatus, errorThrown) {
+							console.log('Error in Operation');
+						}
+					});
+				}
+
+				else {
+					$('#msg').html("Please fill in all customer information!");
+				}
+			});
+
+			$("#Logout").click(function () {
+				window.localStorage.clear();
+				window.location.assign("http://localhost:3001/login.html");
+			});
+		});  
+	</script>
+</head>
+
+<header role="banner">
+	<h1>Administrator Panel</h1>
+	<ul class="utilities">
+		<br>
+		<li class="users"><a href="#">My Account</a></li>
+		<li class="logout warn"><a id="Logout">Log Out</a></li>
+	</ul>
+</header>
+
+<nav role='navigation'>
+	<ul class="main">
+		<li class="write"><a href="http://localhost:3001/admin_new_actor.html">Add New Actor</a></li>
+		<li class="write"><a href="http://localhost:3001/admin_new_customer.html">Add New Customer</a></li>
+	</ul>
+</nav>
+
+<main role="main">
+	<section class="panel important">
+		<h2>New Customer</h2>
+		<form>
+			<div class="twothirds">
+				Store ID:<br />
+				<input type="text" id="storeID" placeholder="Enter Store ID" required="required" /><br />
+				First Name:<br />
+				<input type="text" id="firstName" placeholder="Enter first name of customer"
+					required="required" /><br />
+				Last name:<br />
+				<input type="text" id="lastName" placeholder="Enter last name of customer" required="required" /> <br />
+				Email: <br />
+				<input type="email" id="email" placeholder="Enter email address of customer" required="required" />
+				<br />
+				Address Line 1: <br />
+				<input type="text" id="address1" placeholder="Enter address line 1 of customer" required="required" />
+				<br />
+				Address Line 2: <br />
+				<input type="text" id="address2" placeholder="Enter address line 2 of customer" required="required" />
+				<br />
+				District: <br />
+				<input type="text" id="district" placeholder="Enter district of customer" required="required" /> <br />
+				City ID: <br />
+				<input type="text" id="cityID" placeholder="Enter city id of customer" required="required" /> <br />
+				Postal Code: <br />
+				<input type="text" id="postal" placeholder="Enter postal code of customer" required="required" /> <br />
+				Phone: <br />
+				<input type="tel" id="phone" placeholder="Enter phone number of customer" required="required" /> <br />
+
+				<input type="submit" value="Add" id="Add" />
+				<h2 id="msg"></h2>
+			</div>
+		</form>
+	</section>
+</main>
+
+</html>

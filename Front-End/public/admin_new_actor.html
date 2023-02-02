@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="./css/admin.css">
+	<Title>Administrator</Title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#Add").click(function () {
+				var firstName = $('#firstName').val();
+				var lastName = $('#lastName').val();
+
+				if (firstName != '' && lastName != '') {
+					var token = localStorage.getItem('token');
+					var data = `{ "first_name": "${firstName}", "last_name": "${lastName}" }`;
+
+					$.ajax({
+						headers: { 'authorization': 'Bearer ' + token },
+						url: 'http://localhost:8081/admin/actor',
+						type: 'POST',
+						data: data,
+						contentType: "application/json; charset=utf-8",
+						dataType: 'json',
+						success: function (data, textStatus, xhr) {
+							if (data != null && data.success) {
+								$('#msg').html("Actor added successfully!");
+							} else {
+								console.log("Error");
+							}
+						},
+						error: function (xhr, textStatus, errorThrown) {
+							$('#msg').html("Error in Operation!");
+						}
+					});
+				}
+
+				else {
+					$('#msg').html("Please enter all actor information!");
+				}
+			});
+
+			$("#Logout").click(function () {
+				window.localStorage.clear();
+				window.location.assign("http://localhost:3001/login.html");
+			});
+		});  
+	</script>
+</head>
+
+<header role="banner">
+	<h1>Administrator Panel</h1>
+	<ul class="utilities">
+		<br>
+		<li class="users"><a href="#">My Account</a></li>
+		<li class="logout warn"><a id="Logout">Log Out</a></li>
+	</ul>
+</header>
+
+<nav role='navigation'>
+	<ul class="main">
+		<li class="write"><a href="http://localhost:3001/admin_new_actor.html">Add New Actor</a></li>
+		<li class="write"><a href="http://localhost:3001/admin_new_customer.html">Add New Customer</a></li>
+	</ul>
+</nav>
+
+<main role="main">
+	<section class="panel important">
+		<h2>New Actor</h2>
+		<form>
+			<div class="twothirds">
+				First Name:<br />
+				<input type="text" id="firstName" placeholder="Enter first name of actor" required="required" /><br />
+				Last name:<br />
+				<input type="text" id="lastName" placeholder="Enter last name of actor" required="required" /> <br />
+				<input type="submit" value="Add" id="Add" />
+				<h2 id="msg"></h2>
+			</div>
+		</form>
+	</section>
+</main>
+
+</html>
