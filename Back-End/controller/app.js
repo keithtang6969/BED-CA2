@@ -75,18 +75,18 @@ app.post('/admin/customer', verifyToken, function (req, res) {
 });
 
 //User search
-app.get('/home/search', function (req, res) {
-    var search = req.body.search;
+app.get('/home/films', function (req, res) {
+    var search = req.query.search;
 
     user.searchDVD(search, function (err, result) {
         if (err) {
-            console.log(err);
+            res.status(500).send(err);
         }
 
         else {
-            res.setHeader('Content-Type', 'application/json');
-            res.send(result);
+            res.status(200).send(result);
         }
     });
-}); 
+});
+
 module.exports = app;
