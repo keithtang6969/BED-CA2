@@ -28,7 +28,7 @@ var admin = {
                         var token = "";
 
                         if (result.length == 1) {
-                            token = jwt.sign({ id: result[0].userid, role: result[0].role }, config.key, {
+                            token = jwt.sign({ id: result[0].staff_id, email: result[0].email }, config.key, {
                                 expiresIn: 86400 //expires in 24 hrs
                             });
 
@@ -37,7 +37,7 @@ var admin = {
                         }
 
                         else {
-                            var err2 = new Error("UserID/Password does not match.");
+                            var err2 = new Error("Email/Password does not match.");
                             err2.statusCode = 500;
                             return callback(err2, null, null);
                         }

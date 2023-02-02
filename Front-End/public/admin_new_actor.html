@@ -29,6 +29,7 @@
 						success: function (data, textStatus, xhr) {
 							if (data != null && data.success) {
 								$('#msg').html("Actor added successfully!");
+								window.location.assign('http://localhost:3001/login.html');
 							} else {
 								console.log("Error");
 							}
