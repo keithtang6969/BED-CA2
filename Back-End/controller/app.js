@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(urlencodedParser);
 
 var admin = require('../model/admin.js');
-var user = require('../model/user');
+var film = require('../model/film');
 
 //Administrator Login
 app.post('/admin/login', function (req, res) {
@@ -78,7 +78,7 @@ app.post('/admin/customer', verifyToken, function (req, res) {
 app.get('/home/films', function (req, res) {
     var search = req.query.search;
 
-    user.searchDVD(search, function (err, result) {
+    film.searchDVD(search, function (err, result) {
         if (err) {
             res.status(500).send(err);
         }

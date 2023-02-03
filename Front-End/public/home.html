@@ -8,36 +8,36 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/home.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
         $(document).ready(function () {
             $("#searchButton").click(function () {
-                var search = $('#searchText').val();
+                $('#dvd').empty();
+                var search = $('#searchString').val();
                 var data = `{ "search": "${search}" }`;
 
-                $.ajax({
-                    url: `http://localhost:8081/home/films?search=${search}`,
-                    type: 'GET',
-                    data: data,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data, textStatus, xhr) {
-                        if (data != null && data.success) {
-                            $('#result').html("Hallo Welt");
-                        }
-
-                        else {
-                            console.log("Error");
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log('Error in Operation');
-                    }
+                $.get(`http://localhost:8081/home/films?search=${search}`, function (data, status) {
+                    const films = data;
+                    var display = "";
+                    films.forEach(function (film) {
+                        display = `
+                        <a href="/film/${film.FID}" id="getFilmDetails">
+                            <div class="card">
+                                <div class="card-header"><h1>${film.title}</h1></div>
+                                
+                            </div>
+                        </a>`
+                        $('#dvd').append(display);
+                    });
                 });
                 return false;
             });
-        });  
+        });
     </script>
 </head>
 
@@ -48,13 +48,18 @@
         <a href="">Contact</a>
         <div class="search-container">
             <form>
-                <input type="text" id="searchText" placeholder="Search.." name="search">
+                <input type="text" id="searchString" placeholder="Search.." name="search">
                 <button type="submit" id="searchButton"><i class="fa fa-search"></i></button>
             </form>
         </div>
     </div>
 
-    <div id="result"></div>
+    <div id="dvd"></div>
+
+</body>
+
+</html>
+
 
 </body>
 

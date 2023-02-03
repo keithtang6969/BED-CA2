@@ -1,6 +1,6 @@
 var db = require('./databaseConfig.js');
 
-var user = {
+var film = {
     searchDVD: function (search, callback) {
         var conn = db.getConnection();
         conn.connect(function (err) {
@@ -12,7 +12,9 @@ var user = {
             else {
                 console.log(`Search for DVD: ${search}`);
 
-                var sql = `SELECT title from film WHERE title LIKE '${search}%'`;
+                search = `${search}%`;
+
+                var sql = 'SELECT * FROM film_list WHERE title LIKE ?';
 
                 conn.query(sql, [search], function (err, result) {
                     if (err) {
@@ -28,7 +30,7 @@ var user = {
 
             }
         })
-    }
+    },
 }
 
-module.exports = user;
+module.exports = film;
