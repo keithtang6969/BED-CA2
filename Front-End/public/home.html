@@ -16,15 +16,15 @@
 
     <script>
         $(document).ready(function () {
-            $("#submit").click(function () {
+            $('#submit').click(function () {
                 $('#result').empty();
                 var search = $('#search').val();
                 var max = $('#max').val();
                 $.get(`http://localhost:8081/films?search=${search}&max=${max}`, function (data, status) {
-
                     if (data != "") {
                         const films = data;
                         var result = "";
+
                         films.forEach(function (film) {
                             result =
                                 `<div class="container">
@@ -57,6 +57,15 @@
                 });
                 return false;
             });
+
+            $.get('http://localhost:8081/search/categories', function (data, status) {
+                var categories = data;
+
+                categories.forEach(function (category) {
+                    result = `<option value="${category.name}" id="${category.name}">${category.name}</option>`;
+                    $('#categoryDropDown').append(result);
+                });
+            });
         });
     </script>
 </head>
@@ -85,12 +94,8 @@
         <div class="categoryDiv">
             <label id="categoryLabel">Search By Category</label>
             <br>
-            <select id="category">
+            <select id="categoryDropDown">
                 <option value=""></option>
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
             </select>
             <br><br>
             <input type="submit" id="submit">

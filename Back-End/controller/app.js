@@ -11,6 +11,8 @@ app.use(urlencodedParser);
 
 var admin = require('../model/admin.js');
 var film = require('../model/film');
+var search = require('../model/search');
+const { displayCategories } = require('../model/search');
 
 //Administrator Login
 app.post('/admin/login', function (req, res) {
@@ -99,7 +101,18 @@ app.get('/film', function (req, res) {
         else {
             res.status(200).send(film);
         }
-    })
-})
+    });
+});
 
+app.get('/search/categories', function (req, res) {
+    search.displayCategories(function (err, result) {
+        if (err) {
+            res.status(500).send(err);
+        }
+
+        else {
+            res.status(200).send(result)
+        }
+    });
+});
 module.exports = app;
