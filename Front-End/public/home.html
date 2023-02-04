@@ -1,39 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/home.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Home</title>
+    <link rel="stylesheet" href="./css/home.css">
 
     <script>
         $(document).ready(function () {
-            $("#searchButton").click(function () {
-                $('#dvd').empty();
-                var search = $('#searchString').val();
-                var data = `{ "search": "${search}" }`;
+            $("#submit").click(function () {
+                $('#result').empty();
+                var search = $('#search').val();
+                var max = $('#max').val();
+                $.get(`http://localhost:8081/films?search=${search}&max=${max}`, function (data, status) {
 
-                $.get(`http://localhost:8081/home/films?search=${search}`, function (data, status) {
-                    const films = data;
-                    var display = "";
-                    films.forEach(function (film) {
-                        display = `
-                        <a href="/film/${film.FID}" id="getFilmDetails">
-                            <div class="card">
-                                <div class="card-header"><h1>${film.title}</h1></div>
-                                
-                            </div>
-                        </a>`
-                        $('#dvd').append(display);
-                    });
+                    if (data != "") {
+                        const films = data;
+                        var result = "";
+                        films.forEach(function (film) {
+                            result =
+                                `<div class="container">
+                                <a href="http://localhost:3001/film.html?=${film.FID}" id="film">
+                                    <div class="row">
+                                        <div class="col-md-4 justify-content-between display-flex my-5">
+                                            <img class="img-fluid" src="http://localhost:8081/image/${film.image}" id="film-image">
+                                        </div>
+                                        <div class="col-md-8 justify-content-between display-flex my-5" id="result">
+                                            <br />
+                                            <h1>${film.title}</h1>
+                                            <h1>$${film.price}</h1>
+                                            <p>${film.description}</p>
+                                            <p>Click to view more</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>`
+                            $('#result').append(result);
+                        });
+                    } else {
+                        if (max != '') {
+                            $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}, Max Price: $${max}</h1>`);
+                        } else {
+                            $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
+                        }
+                    }
+                }).fail(function () {
+                    window.alert('An unknown error has occured!');
                 });
                 return false;
             });
@@ -42,25 +62,42 @@
 </head>
 
 <body>
-    <div class="topnav">
-        <a class="active" href="">Home</a>
-        <a href="">About</a>
-        <a href="">Contact</a>
-        <div class="search-container">
-            <form>
-                <input type="text" id="searchString" placeholder="Search.." name="search">
-                <button type="submit" id="searchButton"><i class="fa fa-search"></i></button>
-            </form>
+    <div class="bg">
+        <ul>
+            <li><a class="active" href="#home">Home</a></li>
+            <li><a href="http://localhost:3001/login.html">Admin</a></li>
+        </ul>
+
+        <div class="group">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                <g>
+                    <path
+                        d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                    </path>
+                </g>
+            </svg>
+            <input placeholder="Search By: Title" id="search" type="search" class="input">
         </div>
+
+        <div class="maxPrice">
+            <input placeholder="Input Max Price" type="search" class="input" id="max">
+        </div>
+        <div class="categoryDiv">
+            <label id="categoryLabel">Search By Category</label>
+            <br>
+            <select id="category">
+                <option value=""></option>
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="opel">Opel</option>
+                <option value="audi">Audi</option>
+            </select>
+            <br><br>
+            <input type="submit" id="submit">
+        </div>
+
     </div>
-
-    <div id="dvd"></div>
-
-</body>
-
-</html>
-
-
+    <div id="result"></div>
 </body>
 
 </html>

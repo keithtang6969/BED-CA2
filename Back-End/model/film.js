@@ -1,7 +1,7 @@
 var db = require('./databaseConfig.js');
 
 var film = {
-    searchDVD: function (search, callback) {
+    searchDVD: function (search, max, callback) {
         var conn = db.getConnection();
         conn.connect(function (err) {
             if (err) {
@@ -10,13 +10,18 @@ var film = {
             }
 
             else {
-                console.log(`Search for DVD: ${search}`);
+                console.log(`Search for DVD: ${search}, Max: ${max}`);
 
-                search = `${search}%`;
+                search = `${search}%`; 
 
-                var sql = 'SELECT * FROM film_list WHERE title LIKE ?';
+                if (max == '') {
+                    max = 9.99;
+                }
+                max = parseFloat(max);
 
-                conn.query(sql, [search], function (err, result) {
+                var sql = 'SELECT * FROM film_list WHERE title LIKE ? AND price <= ?';
+
+                conn.query(sql, [search, max], function (err, result) {
                     if (err) {
                         console.log(err);
                         return callback(err, null);
@@ -27,10 +32,36 @@ var film = {
                         return callback(null, result);
                     }
                 })
-
             }
         })
     },
+
+    accessDVD: function (film_id, callback) {
+        var conn = db.getConnection();
+        conn.connect(function (err) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            }
+
+            else {
+                console.log(`Access film details: #${film_id}`);
+
+                var sql = 'SELECT * FROM film_list WHERE FID = ?';
+                
+                conn.query(sql, [film_id], function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return callback(err, null);
+                    }
+                    else {
+                        console.log(result);
+                        return callback(null, result);
+                    }
+                });
+            }
+        });
+    }
 }
 
 module.exports = film;

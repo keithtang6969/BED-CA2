@@ -74,11 +74,11 @@ app.post('/admin/customer', verifyToken, function (req, res) {
     });
 });
 
-//User search
-app.get('/home/films', function (req, res) {
+app.get('/films', function (req, res) {
     var search = req.query.search;
+    var max = req.query.max;
 
-    film.searchDVD(search, function (err, result) {
+    film.searchDVD(search, max, function (err, result) {
         if (err) {
             res.status(500).send(err);
         }
@@ -88,5 +88,18 @@ app.get('/home/films', function (req, res) {
         }
     });
 });
+
+app.get('/film', function (req, res) {
+    var film_id = req.query.film_id;
+
+    film.accessDVD(film_id, function (err, film) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else {
+            res.status(200).send(film);
+        }
+    })
+})
 
 module.exports = app;
