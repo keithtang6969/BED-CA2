@@ -1,3 +1,12 @@
+<!-- 
+Name: Tang Zheng Yin Keith
+Admission Number: 2228002
+Class: DIT/FT/1B/03
+ST0503 BACK-END WEB DEVELOPMENT
+2022/2023 SEMESTER 2
+ASSIGNMENT 2 SOURCE CODE
+ -->
+
 <!DOCTYPE html>
 <html>
 
@@ -20,14 +29,17 @@
                 $('#result').empty();
                 var search = $('#search').val();
                 var max = $('#max').val();
-                $.get(`http://localhost:8081/films?search=${search}&max=${max}`, function (data, status) {
-                    if (data != "") {
-                        const films = data;
-                        var result = "";
+                var category = $('#categoryDropDown').val();
 
-                        films.forEach(function (film) {
-                            result =
-                                `<div class="container">
+                if (category == "") {
+                    $.get(`http://localhost:8081/films?search=${search}&max=${max}`, function (data, status) {
+                        if (data != "") {
+                            const films = data;
+                            var result = "";
+
+                            films.forEach(function (film) {
+                                result =
+                                    `<div class="container">
                                 <a href="http://localhost:3001/film.html?=${film.FID}" id="film">
                                     <div class="row">
                                         <div class="col-md-4 justify-content-between display-flex my-5">
@@ -43,28 +55,63 @@
                                     </div>
                                 </a>
                             </div>`
-                            $('#result').append(result);
-                        });
-                    } else {
-                        if (max != '') {
-                            $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}, Max Price: $${max}</h1>`);
+                                $('#result').append(result);
+                            });
                         } else {
-                            $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
+                            if (max != '') {
+                                $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}, Max Price: $${max}</h1>`);
+                            } else {
+                                $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
+                            }
                         }
-                    }
-                }).fail(function () {
-                    window.alert('An unknown error has occured!');
-                });
-                return false;
+                    });
+                } else {
+                    $.get(`http://localhost:8081/film/category?category=${category}&max=${max}`, function (data, status) {
+                        if (data != "") {
+                            const films = data;
+                            var result = "";
+
+                            films.forEach(function (film) {
+                                result =
+                                    `<div class="container">
+                                <a href="http://localhost:3001/film.html?=${film.FID}" id="film">
+                                    <div class="row">
+                                        <div class="col-md-4 justify-content-between display-flex my-5">
+                                            <img class="img-fluid" src="http://localhost:8081/image/${film.image}" id="film-image">
+                                        </div>
+                                        <div class="col-md-8 justify-content-between display-flex my-5" id="result">
+                                            <br />
+                                            <h1>${film.title}</h1>
+                                            <h1>$${film.price}</h1>
+                                            <p>${film.description}</p>
+                                            <p>Click to view more</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>`
+                                $('#result').append(result);
+                            });
+                        } else {
+                            if (max != '') {
+                                $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}, Max Price: $${max}</h1>`);
+                            } else {
+                                $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
+                            }
+                        }
+                    });
+                }
+
             });
 
-            $.get('http://localhost:8081/search/categories', function (data, status) {
+            $.get('http://localhost:8081/categories', function (data, status) {
                 var categories = data;
 
                 categories.forEach(function (category) {
                     result = `<option value="${category.name}" id="${category.name}">${category.name}</option>`;
                     $('#categoryDropDown').append(result);
                 });
+            }).fail(function () {
+                window.alert('An unknown error has occured!');
             });
         });
     </script>

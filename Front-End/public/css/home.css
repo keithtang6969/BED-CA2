@@ -1,3 +1,12 @@
+/*
+Name: Tang Zheng Yin Keith
+Admission Number: 2228002
+Class: DIT/FT/1B/03
+ST0503 BACK-END WEB DEVELOPMENT
+2022/2023 SEMESTER 2
+ASSIGNMENT 2 SOURCE CODE
+*/
+
 body,
 html {
   height: 100%;
@@ -181,7 +190,7 @@ li a:hover:not(.active) {
 }
 
 #submit {
-  margin-top: 40px;
+  margin-top: 30px;
   height: 45px;
   width: 130px;
   border-radius: 10px;

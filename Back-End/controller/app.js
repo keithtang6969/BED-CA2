@@ -1,3 +1,12 @@
+/*
+Name: Tang Zheng Yin Keith
+Admission Number: 2228002
+Class: DIT/FT/1B/03
+ST0503 BACK-END WEB DEVELOPMENT
+2022/2023 SEMESTER 2
+ASSIGNMENT 2 SOURCE CODE
+*/
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -12,7 +21,6 @@ app.use(urlencodedParser);
 var admin = require('../model/admin.js');
 var film = require('../model/film');
 var search = require('../model/search');
-const { displayCategories } = require('../model/search');
 
 //Administrator Login
 app.post('/admin/login', function (req, res) {
@@ -80,7 +88,7 @@ app.get('/films', function (req, res) {
     var search = req.query.search;
     var max = req.query.max;
 
-    film.searchDVD(search, max, function (err, result) {
+    film.searchByTitle(search, max, function (err, result) {
         if (err) {
             res.status(500).send(err);
         }
@@ -104,7 +112,7 @@ app.get('/film', function (req, res) {
     });
 });
 
-app.get('/search/categories', function (req, res) {
+app.get('/categories', function (req, res) {
     search.displayCategories(function (err, result) {
         if (err) {
             res.status(500).send(err);
@@ -115,4 +123,20 @@ app.get('/search/categories', function (req, res) {
         }
     });
 });
+
+app.get('/film/category', function (req, res) {
+    var category = req.query.category;
+    var max = req.query.max;
+
+    film.searchByCategory(category, max, function (err, result) {
+        if (err) {
+            res.status(500).send(err);
+        }
+
+        else {
+            res.status(200).send(result);
+        }
+    });
+});
+
 module.exports = app;
