@@ -134,11 +134,10 @@ app.get('/film/category', function (req, res) {
     });
 });
 
-//Customer email duplicate check
-app.get('/email/duplicate/check' , function (req, res) {
+app.get('/emailDuplicateCheck', function (req, res) {
     var email = req.query.email;
 
-    admin.duplicateEmailCheck(email, function (err, result) {
+    admin.emailDuplicateCheck(email, function (err, result) {
         if (err) {
             res.status(500).send(err);
         }
@@ -146,6 +145,7 @@ app.get('/email/duplicate/check' , function (req, res) {
         else {
             res.status(200).send(result);
         }
-    })
-});
+    });
+})
+
 module.exports = app;

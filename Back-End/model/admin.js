@@ -23,7 +23,7 @@ var admin = {
             else {
                 console.log(`Connected! Login with email: ${email}, password: ${password}`);
 
-                var sql = 'SELECT * FROM staff WHERE email = ? and password = ?';   
+                var sql = 'SELECT * FROM staff WHERE email = ? and password = ?';
 
                 conn.query(sql, [email, password], function (err, result) {
                     conn.end();
@@ -127,9 +127,9 @@ var admin = {
         });
     },
 
-    duplicateEmailCheck: function(email, callback) {
+    emailDuplicateCheck: function (email, callback) {
         var conn = db.getConnection();
-        conn.connect(function(err) {
+        conn.connect(function (err) {
             if (err) {
                 console.log(err);
                 return callback(err, null);
@@ -137,15 +137,15 @@ var admin = {
 
             else {
                 console.log(`Check for duplicate email: ${email}`);
-                
-                var sql = 'SELECT * from customer WHERE email = ?';
 
-                conn.query(sql, [email], function(err, result) {
+                var sql = 'SELECT * FROM customer WHERE email = ?';
+
+                conn.query(sql, [email], function (err, result) {
                     if (err) {
                         console.log(err);
                         return callback(err, null);
                     }
-                    
+
                     else {
                         console.log(result);
                         return callback(null, result);

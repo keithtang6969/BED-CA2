@@ -23,6 +23,8 @@ ASSIGNMENT 2 SOURCE CODE
 			$("#Add").click(function (event) {
 				event.preventDefault();
 
+				var token = localStorage.getItem("token");
+
 				var store_id = $('#storeID').val();
 				var firstName = $('#firstName').val();
 				var lastName = $('#lastName').val();
@@ -33,61 +35,34 @@ ASSIGNMENT 2 SOURCE CODE
 				var city_id = $('#cityID').val();
 				var postal = $('#postal').val();
 				var phone = $('#phone').val();
+				var requestBody = `{ "store_id": "${store_id}", "first_name": "${firstName}", "last_name": "${lastName}", "email": "${email}", "address": { "address_line1": "${address1}", "address_line2": "${address2}", "district": "${district}", "city_id": "${city_id}", "postal_code": "${postal}", "phone": "${phone}" } }`;
 
-				$.get(`http://localhost:8081/email/duplicate/check?email=${email}`, function (data, status) {
-					if (data === null) {
-						if (store_id != '' && firstName && lastName != '' && email != '' && address1 != '' && address2 != '' && district != '' && city_id != '' && postal != '' && phone != '') {
-							var token = localStorage.getItem('token');
-							var data = `{ "store_id": "${store_id}", "first_name": "${firstName}", "last_name": "${lastName}", "email": "${email}", "address": { "address_line1": "${address1}", "address_line2": "${address2}", "district": "${district}", "city_id": "${city_id}", "postal_code": "${postal}", "phone": "${phone}" } }`;
 
+				if (store_id != '' && firstName && lastName != '' && email != '' && address1 != '' && address2 != '' && district != '' && city_id != '' && postal != '' && phone != '') {
+					$.get(`http://localhost:8081/emailDuplicateCheck?email=${email}`, function (data, status) {
+						if (data.length == 0) {
 							$.ajax({
 								headers: { 'authorization': 'Bearer ' + token },
 								url: 'http://localhost:8081/admin/customer',
 								type: 'POST',
-								data: data,
+								data: requestBody,
 								contentType: "application/json; charset=utf-8",
 								dataType: 'json',
 								success: function (data, textStatus, xhr) {
-									$('#msg').html('Customer added successfully!');
+									window.alert(`Customer successfully added`);
 								},
-
 								error: function (xhr, textStatus, errorThrown) {
-									$('#msg').html("An unknown error has occured");
+									window.alert("An unknown error has occured");
 								}
 							});
 						}
-
 						else {
-							$('#msg').html("Please enter all customer information!");
-						}
-					} else {
-						window.alert("Customer email address already exists");
-					}
-				})
-
-				if (store_id != '' && firstName && lastName != '' && email != '' && address1 != '' && address2 != '' && district != '' && city_id != '' && postal != '' && phone != '') {
-					var token = localStorage.getItem('token');
-					var data = `{ "store_id": "${store_id}", "first_name": "${firstName}", "last_name": "${lastName}", "email": "${email}", "address": { "address_line1": "${address1}", "address_line2": "${address2}", "district": "${district}", "city_id": "${city_id}", "postal_code": "${postal}", "phone": "${phone}" } }`;
-
-					$.ajax({
-						headers: { 'authorization': 'Bearer ' + token },
-						url: 'http://localhost:8081/admin/customer',
-						type: 'POST',
-						data: data,
-						contentType: "application/json; charset=utf-8",
-						dataType: 'json',
-						success: function (data, textStatus, xhr) {
-							$('#msg').html('Customer added successfully!');
-						},
-
-						error: function (xhr, textStatus, errorThrown) {
-							$('#msg').html("An unknown error has occured");
+							window.alert("Customer email already exists in database!");
 						}
 					});
-				}
-
+				} 			
 				else {
-					$('#msg').html("Please enter all customer information!");
+					window.alert("Please enter all customer information!");
 				}
 			});
 
