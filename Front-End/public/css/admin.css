@@ -322,3 +322,10 @@ form input[type="submit"]:hover {
     width: 23%;
   }
 }
+
+#storeID {
+  margin-left: 2px;
+  height: 30px;
+  width: 300px;
+  border-width: 0.5px;
+}

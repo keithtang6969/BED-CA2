@@ -153,7 +153,7 @@ var admin = {
                 });
             }
         });
-    }
+    },
 }
 
 module.exports = admin;

@@ -79,6 +79,20 @@ app.post('/admin/customer', verifyToken, function (req, res) {
     });
 });
 
+//Add new DVD (Administrator only)
+app.post('/admin/DVD', verifyToken, function (req, res) {
+    var title = req.body.title;
+    var description = req.body.description;
+    var category = req.body.category;
+    var price = req.body.price;
+    var length = req.body.length;
+    var rating = req.body.rating;
+    var actors = req.body.actors;
+    var release = req.body.release;
+    var image = req.body.image;
+
+});
+
 app.get('/films', function (req, res) {
     var search = req.query.search;
     var max = req.query.max;

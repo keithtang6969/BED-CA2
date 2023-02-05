@@ -25,7 +25,7 @@ ASSIGNMENT 2 SOURCE CODE
 			if (token === null) {
 				window.location.assign('/login.html');
 			}
-			
+
 			else {
 				$("#Add").click(function (event) {
 					event.preventDefault();
@@ -101,8 +101,12 @@ ASSIGNMENT 2 SOURCE CODE
 		<h2>New Customer</h2>
 		<form>
 			<div class="twothirds">
-				Store ID:<br />
-				<input type="text" id="storeID" placeholder="Enter Store ID" required="required" /><br />
+				Store ID: <br />
+				<select id="storeID">
+					<option value="1">1</option>
+					<option value="2">2</option>
+				</select>
+				<br /><br />
 				First Name:<br />
 				<input type="text" id="firstName" placeholder="Enter first name of customer"
 					required="required" /><br />
