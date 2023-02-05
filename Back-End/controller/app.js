@@ -148,4 +148,19 @@ app.get('/emailDuplicateCheck', function (req, res) {
     });
 })
 
+app.get('/search/title/category', function (req, res) {
+    var search = req.query.search;
+    var category = req.query.category;
+    var max = req.query.max;
+
+    film.searchByTitleAndCategory(search, category, max, function (err, result) {
+        if (err) {
+            res.status(500).send(err);
+        }
+
+        else {
+            res.status(200).send(result);
+        }
+    })
+});
 module.exports = app;

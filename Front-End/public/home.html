@@ -25,6 +25,19 @@ ASSIGNMENT 2 SOURCE CODE
 
     <script>
         $(document).ready(function () {
+            //Load category dropdown
+            $.get('http://localhost:8081/categories', function (data, status) {
+                var categories = data;
+
+                categories.forEach(function (category) {
+                    result = `<option value="${category.name}" id="${category.name}">${category.name}</option>`;
+                    $('#categoryDropDown').append(result);
+                });
+            }).fail(function () {
+                window.alert('An unknown error has occured!');
+            });
+
+            //
             $('#submit').click(function () {
                 $('#result').empty();
                 var search = $('#search').val();
@@ -64,8 +77,12 @@ ASSIGNMENT 2 SOURCE CODE
                                 $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
                             }
                         }
+                    }).fail(function () {
+                        window.alert('An unknown error has occured!');
                     });
-                } else {
+                }
+
+                else if (search == "") {
                     $.get(`http://localhost:8081/film/category?category=${category}&max=${max}`, function (data, status) {
                         if (data != "") {
                             const films = data;
@@ -98,20 +115,48 @@ ASSIGNMENT 2 SOURCE CODE
                                 $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
                             }
                         }
+                    }).fail(function () {
+                        window.alert('An unknown error has occured!');
                     });
                 }
 
-            });
+                else if (search != "" && category != "") {
+                    $.get(`http://localhost:8081/search/title/category?search=${search}&category=${category}&max=${max}`, function (data, status) {
+                        if (data != "") {
+                            const films = data;
+                            var result = "";
 
-            $.get('http://localhost:8081/categories', function (data, status) {
-                var categories = data;
-
-                categories.forEach(function (category) {
-                    result = `<option value="${category.name}" id="${category.name}">${category.name}</option>`;
-                    $('#categoryDropDown').append(result);
-                });
-            }).fail(function () {
-                window.alert('An unknown error has occured!');
+                            films.forEach(function (film) {
+                                result =
+                                    `<div class="container">
+                                <a href="http://localhost:3001/film.html?=${film.FID}" id="film">
+                                    <div class="row">
+                                        <div class="col-md-4 justify-content-between display-flex my-5">
+                                            <img class="img-fluid" src="http://localhost:8081/image/${film.image}" id="film-image">
+                                        </div>
+                                        <div class="col-md-8 justify-content-between display-flex my-5" id="result">
+                                            <br />
+                                            <h1>${film.title}</h1>
+                                            <h1>$${film.price}</h1>
+                                            <p>${film.description}</p>
+                                            <p>Click to view more</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>`
+                                $('#result').append(result);
+                            });
+                        } else {
+                            if (max != '') {
+                                $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}, Max Price: $${max}</h1>`);
+                            } else {
+                                $('#result').append(`<h1 id="no-search-results">No Search Results For: ${search}</h1>`);
+                            }
+                        }
+                    }).fail(function () {
+                        window.alert('An unknown error has occured!');
+                    });
+                }
             });
         });
     </script>

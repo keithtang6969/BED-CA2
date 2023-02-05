@@ -102,6 +102,41 @@ var film = {
             }
         });
     },
+
+    searchByTitleAndCategory: function (search, category, max, callback) {
+        var conn = db.getConnection();
+        conn.connect(function (err) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            }
+
+            else {
+                console.log(`Search By Title: ${search}, Category: ${category}, Max: ${max}`);
+
+                search = `${search}%`;
+
+                if (max == '') {
+                    max = 9.99;
+                }
+                max = parseFloat(max);
+
+                var sql = 'SELECT * FROM film_list WHERE title LIKE ? AND category = ? AND price <= ?'
+
+                conn.query(sql, [search, category, max], function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        return callback(err, null);
+                    }
+
+                    else {
+                        console.log(result);
+                        return callback(null, result);
+                    }
+                });
+            }
+        });
+    }
 }
 
 module.exports = film;
