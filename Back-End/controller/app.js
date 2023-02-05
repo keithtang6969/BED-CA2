@@ -49,15 +49,11 @@ app.post('/admin/actor', verifyToken, function (req, res) {
 
     admin.addNewActor(first_name, last_name, function (err, result) {
         if (err) {
-            res.status(500);
-            res.send(err.statuscode);
-
+            res.status(500).send(err);
         }
 
         else {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({ success: true, result: result, status: 'Record updated successfully!' });
+            res.status(200).send(result);
         }
     })
 });
@@ -73,12 +69,11 @@ app.post('/admin/customer', verifyToken, function (req, res) {
     admin.addNewCustomer(address.address_line1, address.address_line2, address.district, address.city_id, address.postal_code, address.phone, store_id, first_name, last_name, email, function (err, result) {
         if (err) {
             console.log(err);
+            res.status(500).send(err);
         }
 
         else {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({ success: true, result: result, status: 'Record updated successfully!' });
+            res.status(200).send(result);
         }
 
     });
@@ -139,4 +134,18 @@ app.get('/film/category', function (req, res) {
     });
 });
 
+//Customer email duplicate check
+app.get('/email/duplicate/check' , function (req, res) {
+    var email = req.query.email;
+
+    admin.duplicateEmailCheck(email, function (err, result) {
+        if (err) {
+            res.status(500).send(err);
+        }
+
+        else {
+            res.status(200).send(result);
+        }
+    })
+});
 module.exports = app;

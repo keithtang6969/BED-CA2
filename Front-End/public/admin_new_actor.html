@@ -18,44 +18,50 @@ ASSIGNMENT 2 SOURCE CODE
 	<link rel="stylesheet" href="./css/admin.css">
 	<Title>Administrator</Title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>			
+	var token = localStorage.getItem('token');
+
 		$(document).ready(function () {
-			$("#Add").click(function () {
-				var firstName = $('#firstName').val();
-				var lastName = $('#lastName').val();
+			if (token === null) {
+				window.location.assign('/login.html');
+			}
 
-				if (firstName != '' && lastName != '') {
-					var token = localStorage.getItem('token');
-					var data = `{ "first_name": "${firstName}", "last_name": "${lastName}" }`;
+			else {
+				$("#Add").click(function (event) {
+					event.preventDefault();
+					var firstName = $('#firstName').val();
+					var lastName = $('#lastName').val();
 
-					$.ajax({
-						headers: { 'authorization': 'Bearer ' + token },
-						url: 'http://localhost:8081/admin/actor',
-						type: 'POST',
-						data: data,
-						contentType: "application/json; charset=utf-8",
-						dataType: 'json',
-						success: function (data, textStatus, xhr) {
-							if (data != null && data.success) {
-								$('#msg').html("Actor added successfully!");
-							} else {
-								console.log("Error");
+					if (firstName != '' && lastName != '') {
+						//var token = localStorage.getItem('token');
+						var data = `{ "first_name": "${firstName}", "last_name": "${lastName}" }`;
+
+						$.ajax({
+							headers: { 'authorization': 'Bearer ' + token },
+							url: 'http://localhost:8081/admin/actor',
+							type: 'POST',
+							data: data,
+							contentType: "application/json; charset=utf-8",
+							dataType: 'json',
+							success: function (data, textStatus, xhr) {
+								$('#msg').html(`Actor Successfully Addded: ${firstName} ${lastName}`)
+							},
+							error: function (xhr, textStatus, errorThrown) {
+								$('#msg').html("An unknown error has occured");
 							}
-						},
-						error: function (xhr, textStatus, errorThrown) {
-							$('#msg').html("Error in Operation!");
-						}
-					});
-				}
+						});
+					}
 
-				else {
-					$('#msg').html("Please enter all actor information!");
-				}
-			});
+					else {
+						$('#msg').html("Please enter all actor information!");
+					}
+				});
+			}
 
 			$("#Logout").click(function () {
 				window.localStorage.clear();
-				window.location.assign("http://localhost:3001/login.html");
+				window.location.assign("http://localhost:3001/home.html");
 			});
 		});  
 	</script>
@@ -83,9 +89,9 @@ ASSIGNMENT 2 SOURCE CODE
 		<form>
 			<div class="twothirds">
 				First Name:<br />
-				<input type="text" id="firstName" placeholder="Enter first name of actor" required="required" /><br />
+				<input type="text" id="firstName" placeholder="Enter first name of actor" /><br />
 				Last name:<br />
-				<input type="text" id="lastName" placeholder="Enter last name of actor" required="required" /> <br />
+				<input type="text" id="lastName" placeholder="Enter last name of actor" /> <br />
 				<input type="submit" value="Add" id="Add" />
 				<h2 id="msg"></h2>
 			</div>

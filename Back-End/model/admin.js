@@ -125,6 +125,34 @@ var admin = {
                 }
             }
         });
+    },
+
+    duplicateEmailCheck: function(email, callback) {
+        var conn = db.getConnection();
+        conn.connect(function(err) {
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            }
+
+            else {
+                console.log(`Check for duplicate email: ${email}`);
+                
+                var sql = 'SELECT * from customer WHERE email = ?';
+
+                conn.query(sql, [email], function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        return callback(err, null);
+                    }
+                    
+                    else {
+                        console.log(result);
+                        return callback(null, result);
+                    }
+                });
+            }
+        });
     }
 }
 
