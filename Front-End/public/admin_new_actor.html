@@ -45,23 +45,23 @@ ASSIGNMENT 2 SOURCE CODE
 							contentType: "application/json; charset=utf-8",
 							dataType: 'json',
 							success: function (data, textStatus, xhr) {
-								$('#msg').html(`Actor Successfully Addded: ${firstName} ${lastName}`)
+								window.alert(`Actor Successfully Addded: ${firstName} ${lastName}`)
 							},
 							error: function (xhr, textStatus, errorThrown) {
-								$('#msg').html("An unknown error has occured");
+								window.alert(errorThrown);
 							}
 						});
 					}
 
 					else {
-						$('#msg').html("Please enter all actor information!");
+						window.alert("Please enter all actor information!");
 					}
 				});
 			}
 
 			$("#Logout").click(function () {
 				window.localStorage.clear();
-				window.location.assign("http://localhost:3001/home.html");
+				window.location.assign("http://localhost:3001/login.html");
 			});
 		});  
 	</script>

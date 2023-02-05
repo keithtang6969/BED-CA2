@@ -19,11 +19,11 @@ ASSIGNMENT 2 SOURCE CODE
 	<Title>Administrator</Title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script>
+		var token = localStorage.getItem("token");
+
 		$(document).ready(function () {
 			$("#Add").click(function (event) {
 				event.preventDefault();
-
-				var token = localStorage.getItem("token");
 
 				var store_id = $('#storeID').val();
 				var firstName = $('#firstName').val();
@@ -60,7 +60,7 @@ ASSIGNMENT 2 SOURCE CODE
 							window.alert("Customer email already exists in database!");
 						}
 					});
-				} 			
+				}
 				else {
 					window.alert("Please enter all customer information!");
 				}
