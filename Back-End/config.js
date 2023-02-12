@@ -8,4 +8,4 @@ ASSIGNMENT 2 SOURCE CODE
 */
 
 var secret = 'abc13nmmAXz';
-module.exports.key = secret;
+module.exports.key = secret;//test
