@@ -12,7 +12,7 @@ const serveStatic = require('serve-static');
 var app = express();
 
 var hostname = "localhost";
-var port = 3001;
+var port = 3000;
 
 app.use(function (req, res, next) {
     console.log(req.url);
