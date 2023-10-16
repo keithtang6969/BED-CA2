@@ -25,7 +25,7 @@
 					success: function (data, textStatus, xhr) {
 						if (data != null && data.success) {
 							localStorage.setItem('token', data.token);
-							window.location.assign("http://localhost:3001/admin_new_actor.html");
+							window.location.assign("http://localhost:3000/admin_new_actor.html");
 						}
 					},
 					error: function (xhr, textStatus, errorThrown) {
