@@ -5,5 +5,5 @@
 - Implementation of user authentication based on JSON Web Tokens.
 
 To run the application:
-```npm install``` in backend & frontend
+```npm install``` in backend & frontend\
 Run the SQL Script in MySQL Workbench: ```bed_dvd_db.sql```
