@@ -1,4 +1,4 @@
-DVD Rental Store
+# DVD Rental Store
 - Implemented Express.js framework to build RESTful APIs and manage routes.
 - Developed with Axios to send promise-based requests to the back-end.
 - Allow for search and filtering of DVDs by using advanced SQL queries to retrieve information from database based on user input.
